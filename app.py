@@ -17,7 +17,7 @@ UPLOAD_DIR = PurePath("./files")
 # ------------------------------------------------------------------
 @app.route('/')
 def main_page():
-  return render_template("upload.html")
+  return render_template("index.html")
 
 @app.route('/data/upload', methods=['POST'])
 def upload_multipart():
