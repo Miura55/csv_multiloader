@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, render_template
 from pathlib import PurePath
 import os
 import sys
@@ -15,6 +15,10 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 UPLOAD_DIR = PurePath("./files")
 
 # ------------------------------------------------------------------
+@app.route('/')
+def main_page():
+  return render_template("upload.html")
+
 @app.route('/data/upload', methods=['POST'])
 def upload_multipart():
   sys.stderr.write("*** upload_multipart *** start ***\n")
