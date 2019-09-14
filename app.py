@@ -62,8 +62,9 @@ def upload_multipart():
 
   sys.stderr.write("*** upload_multipart *** end ***\n")
   print(datas)
-  result = {'result':'upload OK.', 'payload':datas}
-  return make_response(jsonify(result))
+  # result = {'result':'upload OK.', 'payload':datas}
+  # return make_response(jsonify(result))
+  return render_template("result.html", result=datas)
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
