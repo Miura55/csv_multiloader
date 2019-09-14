@@ -35,6 +35,9 @@ def upload_multipart():
 
   upload_files = request.files.getlist('uploadFile_aa')
   sys.stderr.write("len(upload_files) = %d\n" % len(upload_files))
+  datas = {}
+
+  # 読み込んだCSVを処理
   for file in upload_files:
     fileName = file.filename
     sys.stderr.write("fileName = " + fileName + "\n")
@@ -48,10 +51,18 @@ def upload_multipart():
     with open(file_path, encoding=enc_code) as f:
       reader = csv.reader(f)
       for row in reader:
-        print(row)
+        retsu = row[0].split("\t")
+        print(retsu)
+        keyword = retsu[1].replace("\"", "")
+        if keyword and keyword not in datas.keys():
+          datas.update({keyword : 1})
+        elif keyword:
+          datas[keyword] += 1
 
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  return make_response(jsonify({'result':'upload OK.'}))
+  print(datas)
+  result = {'result':'upload OK.', 'payload':datas}
+  return make_response(jsonify(result))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
