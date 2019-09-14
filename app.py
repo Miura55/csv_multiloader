@@ -50,6 +50,7 @@ def upload_multipart():
     enc_code = get_enc(file_path)
     with open(file_path, encoding=enc_code) as f:
       reader = csv.reader(f)
+      next(reader)
       for row in reader:
         retsu = row[0].split("\t")
         print(retsu)
@@ -71,7 +72,6 @@ def handle_over_max_file_size(error):
   return 'result : file size is overed.'
 
 # ------------------------------------------------------------------
-# main
 if __name__ == "__main__":
-  print(app.url_map)
-  app.run(host='localhost', port=3000)
+  app.debug = True
+  app.run(host='0.0.0.0', port=3000)

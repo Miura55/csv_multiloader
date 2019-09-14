@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<head>
-  <title>CSV Leader</title> 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="/static/js/load.js"></script>
-</head>
-<body>
-    <form action="/data/upload" method="post" enctype="multipart/form-data"> 
-        <div class="input-group">
-            <label class="input-group-btn">
-                <span class="btn btn-primary">
-                    Choose File<input type="file" class="form-control-file" name="uploadFile_aa" multiple="multiple" style="display:none">
-                </span>
-            </label>
-            <input type="text" class="form-control" readonly="">
-        </div>
-        <input type="submit" class="btn btn-primary" value="submit">
-    </form>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<form action="/data/upload" method="post" enctype="multipart/form-data"> 
+    <div class="input-group">
+        <label class="input-group-btn">
+            <span class="btn btn-primary">
+                Choose File<input type="file" class="form-control-file" name="uploadFile_aa" multiple="multiple" style="display:none">
+            </span>
+        </label>
+        <input type="text" class="form-control" readonly="">
+    </div>
+    <input type="submit" class="btn btn-primary" value="submit">
+</form>
+{% endblock %}
