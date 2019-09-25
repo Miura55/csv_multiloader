@@ -1,13 +1,13 @@
 # coding: utf-8
 
 from flask import Flask, request, make_response, jsonify, render_template
+import pandas as pd
 from pathlib import PurePath
-import os
-import sys
+from datetime import datetime
+import os, sys
 import csv
 import chardet
 import werkzeug
-from datetime import datetime
 
 # flask
 app = Flask(__name__)
@@ -48,17 +48,23 @@ def upload_multipart():
     file_path = os.path.join(UPLOAD_DIR / saveFileName)
     file.save(file_path)
     enc_code = get_enc(file_path)
-    with open(file_path, encoding=enc_code) as f:
-      reader = csv.reader(f)
-      next(reader)
-      for row in reader:
-        retsu = row[0].split("\t")
-        print(retsu)
-        keyword = retsu[1].replace("\"", "")
-        if keyword and keyword not in datas.keys():
-          datas.update({keyword : 1})
-        elif keyword:
-          datas[keyword] += 1
+
+    # CSVを読み込む
+    df = pd.read_csv(file_path, sep='\t', encoding=enc_code)
+    df = df[df["Keyword"].isnull() == False]
+    print(df["Position History"])    
+
+    # with open(file_path, encoding=enc_code) as f:
+    #   reader = csv.reader(f)
+    #   next(reader)
+    #   for row in reader:
+    #     retsu = row[0].split("\t")
+    #     print(retsu)
+    #     keyword = retsu[1].replace("\"", "")
+    #     if keyword and keyword not in datas.keys():
+    #       datas.update({keyword : 1})
+    #     elif keyword:
+    #       datas[keyword] += 1
 
   sys.stderr.write("*** upload_multipart *** end ***\n")
   print(datas)
