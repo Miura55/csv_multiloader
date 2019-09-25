@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from flask import Flask, request, make_response, jsonify, render_template
+from flask import Flask, request, make_response, jsonify, render_template, render_template_string
 import pandas as pd
 from pathlib import PurePath
 from datetime import datetime
@@ -52,7 +52,7 @@ def upload_multipart():
     # CSVを読み込む
     df = pd.read_csv(file_path, sep='\t', encoding=enc_code)
     df = df[df["Keyword"].isnull() == False]
-    print(df["Position History"])    
+    print(df["Position History"])
 
     # with open(file_path, encoding=enc_code) as f:
     #   reader = csv.reader(f)
@@ -67,8 +67,7 @@ def upload_multipart():
     #       datas[keyword] += 1
 
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  print(datas)
-  return render_template("result.html", result=datas)
+  return render_template("result_pandas.html", table=df.to_html(header='true'))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
