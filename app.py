@@ -35,7 +35,8 @@ def upload_multipart():
 
   upload_files = request.files.getlist('uploadFile_aa')
   sys.stderr.write("len(upload_files) = %d\n" % len(upload_files))
-  datas = {}
+
+  result = pd.DataFrame(index=[], columns=["Keyword", "Volume", "Position History"])
 
   # 読み込んだCSVを処理
   for file in upload_files:
@@ -52,7 +53,9 @@ def upload_multipart():
     # CSVを読み込む
     df = pd.read_csv(file_path, sep='\t', encoding=enc_code)
     df = df[df["Keyword"].isnull() == False]
-    print(df["Position History"])
+    print(df)
+
+    result = result.append(df[["Keyword", "Volume", "Position History"]])
 
     # with open(file_path, encoding=enc_code) as f:
     #   reader = csv.reader(f)
@@ -67,7 +70,7 @@ def upload_multipart():
     #       datas[keyword] += 1
 
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  return render_template("result_pandas.html", table=df.to_html(header='true'))
+  return render_template("result_pandas.html", table=result.to_html(header='true'))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
