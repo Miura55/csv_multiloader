@@ -53,24 +53,12 @@ def upload_multipart():
     # CSVを読み込む
     df = pd.read_csv(file_path, sep='\t', encoding=enc_code)
     df = df[df["Keyword"].isnull() == False]
-    print(df)
+    result = result.append(df[["Keyword", "Volume", "Position History"]]).reset_index(drop=True)
 
-    result = result.append(df[["Keyword", "Volume", "Position History"]])
-
-    # with open(file_path, encoding=enc_code) as f:
-    #   reader = csv.reader(f)
-    #   next(reader)
-    #   for row in reader:
-    #     retsu = row[0].split("\t")
-    #     print(retsu)
-    #     keyword = retsu[1].replace("\"", "")
-    #     if keyword and keyword not in datas.keys():
-    #       datas.update({keyword : 1})
-    #     elif keyword:
-    #       datas[keyword] += 1
-
+  unique_lis = df["Keyword"].value_counts()
+  result["順位取得率（％）"] = [len(upload_files)/unique_lis[word] * 100 for word in df["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  return render_template("result_pandas.html", table=result.to_html(header='true'))
+  return render_template("result_pandas.html", table=result.to_html(index=False))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
