@@ -61,7 +61,7 @@ def upload_multipart():
   result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
   result = result.sort_values("Position History")
-  return render_template("result_pandas.html", table=result[result['Position History'] < 10].to_html(index=False))
+  return render_template("result_pandas.html", table=result[result['Position History'] < 11].to_html(index=False))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
