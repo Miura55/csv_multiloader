@@ -52,13 +52,16 @@ def upload_multipart():
 
     # CSVを読み込む
     df = pd.read_csv(file_path, sep='\t', encoding=enc_code)
-    df = df[df["Keyword"].isnull() == False]
-    result = result.append(df[["Keyword", "Volume", "Position History"]]).reset_index(drop=True)
+    df = df[df["Keyword"].isnull() == False].sort_values("Position History Date")
+    df = df.drop_duplicates(subset='Keyword').reset_index(drop=True)
+    result = result.append(df[["Keyword", "Volume", "Position History", "Traffic (desc)", "CPC", "SERP Features"]]).reset_index(drop=True)
 
-  unique_lis = df["Keyword"].value_counts()
-  result["順位取得率（％）"] = [len(upload_files)/unique_lis[word] * 100 for word in df["Keyword"]]
+  unique_lis = result["Keyword"].value_counts()
+  print(unique_lis)
+  result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  return render_template("result_pandas.html", table=result.to_html(index=False))
+  result = result.sort_values("Position History")
+  return render_template("result_pandas.html", table=result[result['Position History'] < 10].to_html(index=False))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
@@ -69,4 +72,4 @@ def handle_over_max_file_size(error):
 # ------------------------------------------------------------------
 if __name__ == "__main__":
   app.debug = True
-  app.run(host='0.0.0.0', port=3000)
+  app.run(host='localhost', port=3000)
