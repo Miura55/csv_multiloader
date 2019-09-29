@@ -76,9 +76,6 @@ def upload_multipart():
   result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
   result = result.sort_values("Position History")[result['Position History'] < 11]
-  # scores = req_pair(_keyword, result["Keyword"])
-  # print("socres len", len(scores))
-  # print("history len", len(result["Position History"]))
   result["スコア"] = [req_pair(_keyword, text) for text in result["Keyword"]]
   
   return render_template("result_pandas.html", table=result.to_html(index=False))
