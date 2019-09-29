@@ -5,9 +5,13 @@ import pandas as pd
 from pathlib import PurePath
 from datetime import datetime
 import os, sys
-import csv
+import csv, json
 import chardet
 import werkzeug
+import requests
+
+APP_ID = "240d3816ea7bdecfdc441f92acb20aba0a2d0651317de443ca10d16944222079"
+URL = "https://labs.goo.ne.jp/api/textpair"
 
 # flask
 app = Flask(__name__)
@@ -21,6 +25,15 @@ def get_enc(file):
         res = chardet.detect(f.read())
         enc = res["encoding"]
     return enc
+  
+def req_pair(key, text):
+  headers = {
+      'Content-type': 'application/json',
+  }
+  data = {"app_id":APP_ID, "text1":key, "text2":text}
+  response = requests.post(URL, headers=headers, data=json.dumps(data))
+  return json.loads(response.text)["score"]
+
 
 # ------------------------------------------------------------------
 @app.route('/')
@@ -30,6 +43,8 @@ def main_page():
 @app.route('/data/upload', methods=['POST'])
 def upload_multipart():
   sys.stderr.write("*** upload_multipart *** start ***\n")
+  _keyword = request.form["keyword"]
+  sys.stderr.write("Got Keyword : {} \n".format(_keyword)) 
   if 'uploadFile' not in request.files:
     make_response(jsonify({'result':'uploadFile is required.'}))
 
@@ -60,8 +75,13 @@ def upload_multipart():
   print(unique_lis)
   result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
-  result = result.sort_values("Position History")
-  return render_template("result_pandas.html", table=result[result['Position History'] < 11].to_html(index=False))
+  result = result.sort_values("Position History")[result['Position History'] < 11]
+  # scores = req_pair(_keyword, result["Keyword"])
+  # print("socres len", len(scores))
+  # print("history len", len(result["Position History"]))
+  result["スコア"] = [req_pair(_keyword, text) for text in result["Keyword"]]
+  
+  return render_template("result_pandas.html", table=result.to_html(index=False))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
