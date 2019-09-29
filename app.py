@@ -10,7 +10,7 @@ import chardet
 import werkzeug
 import requests
 
-APP_ID = "240d3816ea7bdecfdc441f92acb20aba0a2d0651317de443ca10d16944222079"
+APP_ID = "569da0f652f9fa81dba77cc4ebe9fc1f41ba932f9d39f8219511c9a612dc55d3"
 URL = "https://labs.goo.ne.jp/api/textpair"
 
 # flask
@@ -25,7 +25,7 @@ def get_enc(file):
         res = chardet.detect(f.read())
         enc = res["encoding"]
     return enc
-  
+
 def req_pair(key, text):
   headers = {
       'Content-type': 'application/json',
@@ -44,7 +44,7 @@ def main_page():
 def upload_multipart():
   sys.stderr.write("*** upload_multipart *** start ***\n")
   _keyword = request.form["keyword"]
-  sys.stderr.write("Got Keyword : {} \n".format(_keyword)) 
+  sys.stderr.write("Got Keyword : {} \n".format(_keyword))
   if 'uploadFile' not in request.files:
     make_response(jsonify({'result':'uploadFile is required.'}))
 
@@ -76,9 +76,9 @@ def upload_multipart():
   result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
   result = result.sort_values("Position History")[result['Position History'] < 11]
-  result["スコア"] = [req_pair(_keyword, text) for text in result["Keyword"]]
-  
-  return render_template("result_pandas.html", table=result.to_html(index=False))
+  result["Score"] = [req_pair(_keyword, text) for text in result["Keyword"]]
+
+  return render_template("result_pandas.html", table=result[result["Score"] > 0.59].to_html(index=False))
 
 # ------------------------------------------------------------------
 @app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
