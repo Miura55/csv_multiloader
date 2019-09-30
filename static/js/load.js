@@ -13,3 +13,8 @@ $(document).on('change', ':file', function() {
     console.log(numFiles);
     input.parent().parent().next(':text').val(filelist);
 });
+
+function Form_Submit(){
+    document.forms["addForm"].submit();
+    document.getElementById("Loading").style.display = "block";
+ }

@@ -11,6 +11,7 @@ import werkzeug
 import requests
 
 APP_ID = "569da0f652f9fa81dba77cc4ebe9fc1f41ba932f9d39f8219511c9a612dc55d3"
+# APP_ID = "d636e5a2778befad4a5c0b2d50b1544d1d1ca2b9e47dbe43c7c305c88a750999"
 URL = "https://labs.goo.ne.jp/api/textpair"
 
 # flask
@@ -32,7 +33,11 @@ def req_pair(key, text):
   }
   data = {"app_id":APP_ID, "text1":key, "text2":text}
   response = requests.post(URL, headers=headers, data=json.dumps(data))
-  return json.loads(response.text)["score"]
+  print(response.text)
+  try:
+    return json.loads(response.text)["score"]
+  except KeyError:
+    return 0
 
 
 # ------------------------------------------------------------------

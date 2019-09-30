@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="/data/upload" method="post" enctype="multipart/form-data"> 
+
+<form name="addForm" action="/data/upload" method="post" enctype="multipart/form-data"> 
     <div class="input-group">
         <label class="input-group-btn">
             <span class="btn btn-primary">
@@ -10,6 +11,15 @@
         <input type="text" class="form-control" readonly="">
     </div>
     <input name="keyword"></input>
-    <input type="submit" class="btn btn-primary" value="submit">
+    <input type="button" onclick="Form_Submit()" class="btn btn-primary" value="submit">
 </form>
+
+<!-- 読込中画面 -->
+<div id="Loading" style="display:none;">
+    <img src="/static/img/spinner.gif" class="loadimg">
+    <p class="loadmsg">
+      処理中...<br>
+      しばらくお待ち下さい。
+    </p>
+</div>
 {% endblock %}
