@@ -1,13 +1,13 @@
 /*ロード画面*/
 .loading {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 9999;
+    display: table;
     width: 100%;
-    height: 120%;
-    background-color: rgba(0, 0, 0, 0.3);
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    opacity: 0.8;
 }
 
 .loading .messsage {
