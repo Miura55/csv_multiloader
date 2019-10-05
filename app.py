@@ -27,11 +27,7 @@ def get_enc(file):
 
 def req_pair(key, text):
     cosine = CosineSimilarity.CosineSimilarity()
-    try:
-        return cosine(key, text)
-    except KeyError:
-        return 0
-
+    return cosine(key, text)
 
 # ------------------------------------------------------------------
 @app.route('/')
