@@ -9,7 +9,7 @@ import csv, json
 import chardet
 import werkzeug
 import requests
-import CosineSimilarity
+import MecabSimilar
 
 
 # flask
@@ -26,8 +26,8 @@ def get_enc(file):
   return enc
 
 def req_pair(key, text):
-  cosine = CosineSimilarity.CosineSimilarity()
-  return cosine(key, text)
+  result = MecabSimilar.sentence_similarity(key, text)
+  return result
 
 # ------------------------------------------------------------------
 @app.route('/')
