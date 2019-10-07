@@ -20,14 +20,14 @@ app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 UPLOAD_DIR = PurePath("./files")
 
 def get_enc(file):
-    with open(file, "rb") as f:
-        res = chardet.detect(f.read())
-        enc = res["encoding"]
-    return enc
+  with open(file, "rb") as f:
+    res = chardet.detect(f.read())
+    enc = res["encoding"]
+  return enc
 
 def req_pair(key, text):
-    cosine = CosineSimilarity.CosineSimilarity()
-    return cosine(key, text)
+  cosine = CosineSimilarity.CosineSimilarity()
+  return cosine(key, text)
 
 # ------------------------------------------------------------------
 @app.route('/')
