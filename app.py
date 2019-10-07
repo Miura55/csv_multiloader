@@ -69,6 +69,12 @@ def upload_multipart():
   print(unique_lis)
   result["順位取得率（％）"] = [int(unique_lis[word] / len(upload_files) * 100) for word in result["Keyword"]]
   sys.stderr.write("*** upload_multipart *** end ***\n")
+
+  # 重複したもののうち、Traffic (desc)の高いものを取り出す
+  result = result.sort_values("Traffic (desc)", ascending=False)
+  is_complete_duplicate_keep_first = result.duplicated(keep='first')
+  result = result[~is_complete_duplicate_keep_first]
+
   result = result.sort_values("Position History")[result['Position History'] < 11]
   result["Score"] = [req_pair(_keyword, text) for text in result["Keyword"]]
 

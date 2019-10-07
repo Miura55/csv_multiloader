@@ -3,3 +3,4 @@ chardet
 pandas
 requests
 gunicorn
+gensim
